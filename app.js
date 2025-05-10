@@ -197,21 +197,41 @@ particlesJS('particles-js',
 
 // modal function: to call modals when bitton clicked instead of creating separate modal in the html file!
 
-function showModal(modalId, title, body){
+function showModal(modalId, title, body, videoUrl) {
   let modalTemplate = document.getElementById('exampleModal').cloneNode(true);
   modalTemplate.id = modalId;
   modalTemplate.querySelector('.modal-title').innerText = title;
-  modalTemplate.querySelector('.modal-body').innerText = body;
 
+  // Replace newline characters with <br> tags for proper line breaks
+  let formattedBody = body.replace(/\n/g, '<br>');
 
+  // Set the body content
+  let modalBodyContent = `<p>${formattedBody}</p>`;
 
+  // If a video URL is provided, embed the YouTube video
+  if (videoUrl) {
+    modalBodyContent += `
+      <div class="video-container">
+        <iframe 
+          width="100%" 
+          height="315" 
+          src="${videoUrl}" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture ; fullscreen">
+        </iframe>
+      </div>`;
+  }
+
+  modalTemplate.querySelector('.modal-body').innerHTML = modalBodyContent;
 
   document.body.appendChild(modalTemplate);
 
   let myModal = new bootstrap.Modal(modalTemplate);
   myModal.show();
 
-  modalTemplate.addEventListener('hidden.bs.modal',function(){
+  modalTemplate.addEventListener('hidden.bs.modal', function () {
+  
     modalTemplate.remove();
   });
 }
